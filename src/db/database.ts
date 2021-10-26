@@ -18,5 +18,6 @@ export async function initializeDatabase(): Promise<void> {
     entities: [`${path.join(__dirname, 'entities/*{.ts,.js}')}`],
 
     migrationsRun: true,
+    synchronize: true,
   });
 }

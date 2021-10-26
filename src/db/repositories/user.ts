@@ -32,6 +32,7 @@ class UserRepository {
 
   async findByEmail(email: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({
+      select: ['id', 'password', 'email'],
       where: {
         email,
       },

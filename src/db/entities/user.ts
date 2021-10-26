@@ -12,8 +12,11 @@ class User extends Base {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
+
+  @Column({ select: false, nullable: true })
+  public token?: string;
 
   @Column({ type: 'int4' })
   public profileType?: number;

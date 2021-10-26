@@ -1,16 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 import bcrypt from 'bcryptjs';
 import User from '../db/entities/user';
 import UserRepository from '../db/repositories/user';
-
-interface TokenPayload {
-  id: string;
-  iat: string;
-  exp: string;
-}
 
 @injectable()
 export class UserService {
@@ -23,7 +16,9 @@ export class UserService {
   }
 
   async create(req: Request, res: Response): Promise<Response<User>> {
-    const { email, password } = req.body;
+    const {
+      name, email, password, profileType,
+    } = req.body;
     const hashPassword = bcrypt.hashSync(password, 8);
 
     const userExists = await this.userRepository.findByEmail(email);
@@ -32,37 +27,21 @@ export class UserService {
       return res.sendStatus(httpStatus.CONFLICT);
     }
     const user: User = await this.userRepository.createUser({
+      name,
       email,
       password: hashPassword,
+      profileType,
     });
 
     return res.json(user.email);
   }
 
-  async getMe(req: Request, res: Response): Promise<Response | string> {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      return res.sendStatus(401);
-    }
-
-    const token = authorization.replace('Bearer', '').trim();
-
-    try {
-      const data = jwt.verify(token, process.env.SECRET_KEY);
-      const { id } = data as TokenPayload;
-      const user = await this.userRepository.findById(id);
-      delete user.password;
-
-      return res.json(user as User);
-    } catch {
-      return res.sendStatus(401);
-    }
-  }
-
   async update(req: Request, res: Response): Promise<Response<User>> {
     const userToUpdate: User = {
+      ...req.body.name && { name: req.body.name },
       ...req.body.email && { email: req.body.email },
       ...req.body.password && { password: req.body.password },
+      ...req.body.profileType && { profileType: req.body.profileType },
     };
 
     await this.userRepository.updateById(req.params.id, userToUpdate);
@@ -82,8 +61,8 @@ export class UserService {
 
   async getAll(_req: Request, res: Response): Promise<Response<Array<User | null>>> {
     const usersAll: User[] = await this.userRepository.selectAll({
-      select: ['email', 'password'],
-      order: { email: 'ASC', password: 'DESC' },
+      select: ['id', 'name', 'email'],
+      order: { email: 'ASC' },
     });
     return res.json(usersAll);
   }
