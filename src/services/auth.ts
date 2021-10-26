@@ -25,6 +25,10 @@ export class AuthService {
     const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '1d' });
     delete user.password;
 
+    repository.updateById(user.id, {
+      ...user,
+      token,
+    });
     return res.json({
       token,
     });

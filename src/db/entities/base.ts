@@ -12,19 +12,19 @@ export default class Base {
   @PrimaryGeneratedColumn('uuid')
   public id?: string;
 
-  @Column()
+  @Column({ nullable: true })
   createdBy?: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt?: Date | string;
 
-  @Column()
+  @Column({ nullable: true })
   updatedBy?: string;
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt?: Date | string;
 
-  @Column()
+  @Column({ nullable: true })
   deletedBy?: string;
 
   @DeleteDateColumn({ type: 'timestamptz' })
