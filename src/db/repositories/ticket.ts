@@ -12,15 +12,6 @@ import Ticket from '../entities/ticket';
 class TicketRepository {
   private ticketRepository: Repository<Ticket> = getRepository(Ticket);
 
-  async findByName(name: string): Promise<Ticket | undefined> {
-    const ticket = await this.ticketRepository.findOne({
-      where: {
-        name,
-      },
-    });
-    return ticket;
-  }
-
   async findById(id: string): Promise<Ticket | undefined> {
     const ticket = await this.ticketRepository.findOne({
       where: {
@@ -45,6 +36,10 @@ class TicketRepository {
   async selectAll(options: FindManyOptions<Ticket>):
     Promise<Array<Ticket> | null> {
     return this.ticketRepository.find(options);
+  }
+
+  async selectByUser(userId: string): Promise<Array<Ticket> | null> {
+    return this.ticketRepository.find({ where: { userId } });
   }
 }
 

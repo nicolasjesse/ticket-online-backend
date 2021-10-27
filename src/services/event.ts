@@ -58,7 +58,7 @@ export class EventService {
 
   async getAll(_req: Request, res: Response): Promise<Response<Array<Event | null>>> {
     const eventsAll: Event[] = await this.eventRepository.selectAll({
-      select: ['id', 'name', 'local', 'schedule', 'price', 'quantity', 'date', 'userId'],
+      select: ['id', 'name', 'local', 'schedule', 'price', 'quantity', 'date', 'userId', 'eventType'],
       order: { date: 'ASC' },
     });
     return res.json(eventsAll);

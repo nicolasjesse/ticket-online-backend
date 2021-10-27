@@ -31,6 +31,7 @@ export class AuthService {
     });
     return res.json({
       token,
+      id: user.id,
     });
   }
 }
