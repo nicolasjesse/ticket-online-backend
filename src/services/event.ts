@@ -12,7 +12,7 @@ export class EventService {
 
   async create(req: Request, res: Response): Promise<Response<Event>> {
     const {
-      name, local, schedule, price, quantity, date, 
+      name, local, schedule, price, quantity, date, eventType, userId,
     } = req.body;
 
     const event: Event = await this.eventRepository.createEvent({
@@ -22,6 +22,8 @@ export class EventService {
       price,
       quantity,
       date,
+      eventType,
+      userId,
     });
 
     return res.json(event);
@@ -35,6 +37,8 @@ export class EventService {
       ...req.body.price && { price: req.body.price },
       ...req.body.quantity && { quantity: req.body.quantity },
       ...req.body.date && { date: req.body.date },
+      ...req.body.eventType && { eventType: req.body.eventType },
+      ...req.body.userId && { userId: req.body.userId },
     };
 
     await this.eventRepository.updateById(req.params.id, eventToUpdate);
@@ -54,7 +58,7 @@ export class EventService {
 
   async getAll(_req: Request, res: Response): Promise<Response<Array<Event | null>>> {
     const eventsAll: Event[] = await this.eventRepository.selectAll({
-      select: ['name', 'local', 'schedule', 'price', 'quantity', 'date'],
+      select: ['id', 'name', 'local', 'schedule', 'price', 'quantity', 'date', 'userId'],
       order: { date: 'ASC' },
     });
     return res.json(eventsAll);

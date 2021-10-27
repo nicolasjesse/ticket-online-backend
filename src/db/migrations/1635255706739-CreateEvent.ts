@@ -11,12 +11,10 @@ export class CreateEvent1635255706739 implements MigrationInterface {
           isPrimary: true,
           generationStrategy: 'uuid',
           default: 'uuid_generate_v4()',
-        },
-        {
+        }, {
           name: 'name',
           type: 'varchar',
-        },
-        {
+        }, {
           name: 'local',
           type: 'varchar',
         }, {
@@ -34,6 +32,9 @@ export class CreateEvent1635255706739 implements MigrationInterface {
         }, {
           name: 'eventType',
           type: 'int4',
+        }, {
+          name: 'userId',
+          type: 'uuid',
         }, {
           name: 'createdBy',
           type: 'varchar',
