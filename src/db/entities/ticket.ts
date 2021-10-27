@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import User from './user';
 import Event from './event';
@@ -13,19 +13,19 @@ class Ticket extends Base {
   @Column({ type: 'int4' })
   public paymentStatus?: number;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', select: false })
   public userId: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', select: false })
   public eventId: string;
 
-  @OneToMany(() => User, (user) => user.ticketsTable)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  public userTable?: User[]
+  public user?: User;
 
-  @OneToMany(() => Event, (event) => event.ticketsTable)
+  @ManyToOne(() => Event)
   @JoinColumn({ name: 'eventId', referencedColumnName: 'id' })
-  public eventTable?: Event[]
+  public event?: Event;
 }
 
 export default Ticket;

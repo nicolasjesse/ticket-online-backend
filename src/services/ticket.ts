@@ -17,7 +17,7 @@ export class TicketService {
 
     const ticket: Ticket = await this.ticketRepository.createTicket({
       paymentStatus,
-      userId, 
+      userId,
       eventId,
     });
 
@@ -46,9 +46,20 @@ export class TicketService {
     return res.json(ticket);
   }
 
-  async getAll(_req: Request, res: Response): Promise<Response<Array<Ticket | null>>> {
+  async getAll(req: Request, res: Response): Promise<Response<Array<Ticket | null>>> {
+    let where = {};
+
+    if (req.query.userId) {
+      where = { ...where, userId: req.query.userId };
+    }
+
+    if (req.query.eventId) {
+      where = { ...where, eventId: req.query.eventId };
+    }
+    
     const ticketsAll: Ticket[] = await this.ticketRepository.selectAll({
-      select: ['id', 'paymentStatus', 'userId', 'eventId'],
+      where,
+      select: ['id', 'paymentStatus'],
       order: { paymentStatus: 'ASC' },
     });
     return res.json(ticketsAll);
