@@ -59,7 +59,7 @@ export class TicketService {
     
     const ticketsAll: Ticket[] = await this.ticketRepository.selectAll({
       where,
-      select: ['id', 'paymentStatus', 'userId'],
+      select: ['id', 'paymentStatus'],
       order: { paymentStatus: 'ASC' },
     });
     return res.json(ticketsAll);
