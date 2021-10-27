@@ -61,7 +61,7 @@ export class UserService {
 
   async getAll(_req: Request, res: Response): Promise<Response<Array<User | null>>> {
     const usersAll: User[] = await this.userRepository.selectAll({
-      select: ['id', 'name', 'email'],
+      select: ['id', 'name', 'email', 'profileType'],
       order: { email: 'ASC' },
     });
     return res.json(usersAll);

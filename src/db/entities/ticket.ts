@@ -2,30 +2,30 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import User from './user';
 import Event from './event';
 import Base from './base';
 
-@Entity('events')
+@Entity('tickets')
 class Ticket extends Base {
   @Column({ type: 'int4' })
-  paymentStatus: number;
+  public paymentStatus?: number;
 
   @Column({ type: 'uuid' })
-  userId: string;
+  public userId: string;
 
   @Column({ type: 'uuid' })
-  eventId: string;
+  public eventId: string;
 
-  @ManyToOne(() => User)
+  @OneToMany(() => User, (user) => user.ticketsTable)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
-  userTable?: User[]
+  public userTable?: User[]
 
-  @ManyToOne(() => Event)
+  @OneToMany(() => Event, (event) => event.ticketsTable)
   @JoinColumn({ name: 'eventId', referencedColumnName: 'id' })
-  eventTable?: Event[]
+  public eventTable?: Event[]
 }
 
 export default Ticket;

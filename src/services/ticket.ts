@@ -16,7 +16,9 @@ export class TicketService {
     } = req.body;
 
     const ticket: Ticket = await this.ticketRepository.createTicket({
-      paymentStatus, userId, eventId,
+      paymentStatus,
+      userId, 
+      eventId,
     });
 
     return res.json(ticket);
@@ -46,7 +48,7 @@ export class TicketService {
 
   async getAll(_req: Request, res: Response): Promise<Response<Array<Ticket | null>>> {
     const ticketsAll: Ticket[] = await this.ticketRepository.selectAll({
-      select: ['paymentStatus', 'userId', 'eventId'],
+      select: ['id', 'paymentStatus', 'userId', 'eventId'],
       order: { paymentStatus: 'ASC' },
     });
     return res.json(ticketsAll);
