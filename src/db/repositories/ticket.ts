@@ -13,11 +13,10 @@ class TicketRepository {
   private ticketRepository: Repository<Ticket> = getRepository(Ticket);
 
   async findById(id: string): Promise<Ticket | undefined> {
-    const ticket = await this.ticketRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const ticket = await this.ticketRepository.createQueryBuilder('tickets')
+      .leftJoinAndSelect('tickets.event', 'events')
+      .where({ id })
+      .getOne();
     return ticket;
   }
 
@@ -35,11 +34,12 @@ class TicketRepository {
 
   async selectAll(options: FindManyOptions<Ticket>):
     Promise<Array<Ticket> | null> {
-    return this.ticketRepository.find(options);
-  }
-
-  async selectByUser(userId: string): Promise<Array<Ticket> | null> {
-    return this.ticketRepository.find({ where: { userId } });
+    const tickets: Ticket[] = await this.ticketRepository.createQueryBuilder('tickets')
+      .leftJoinAndSelect('tickets.event', 'events')
+      .leftJoinAndSelect('tickets.user', 'users')
+      .where(options.where)
+      .getMany();
+    return tickets;
   }
 }
 

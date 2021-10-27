@@ -22,11 +22,10 @@ class EventRepository {
   }
 
   async findById(id: string): Promise<Event | undefined> {
-    const event = await this.eventRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const event = await this.eventRepository.createQueryBuilder('events')
+      .leftJoinAndSelect('events.tickets', 'tickets')
+      .where({ id })
+      .getOne();
     return event;
   }
 
@@ -44,7 +43,11 @@ class EventRepository {
 
   async selectAll(options: FindManyOptions<Event>):
     Promise<Array<Event> | null> {
-    return this.eventRepository.find(options);
+    const events = await this.eventRepository.createQueryBuilder('events')
+      .leftJoinAndSelect('events.tickets', 'tickets')
+      .where(options.where)
+      .getMany();
+    return events;
   }
 }
 

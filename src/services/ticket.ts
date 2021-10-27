@@ -50,12 +50,16 @@ export class TicketService {
     let where = {};
 
     if (req.query.userId) {
-      where = { userId: req.query.userId };
+      where = { ...where, userId: req.query.userId };
+    }
+
+    if (req.query.eventId) {
+      where = { ...where, eventId: req.query.eventId };
     }
     
     const ticketsAll: Ticket[] = await this.ticketRepository.selectAll({
       where,
-      select: ['id', 'paymentStatus', 'userId', 'eventId'],
+      select: ['id', 'paymentStatus', 'userId'],
       order: { paymentStatus: 'ASC' },
     });
     return res.json(ticketsAll);

@@ -1,8 +1,7 @@
 import {
   Column,
   Entity,
-  ManyToOne,
-  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import Base from './base';
 import Ticket from './ticket';
@@ -24,9 +23,8 @@ class User extends Base {
   @Column({ type: 'int4' })
   public profileType?: number;
 
-  @ManyToOne(() => Ticket)
-  @JoinColumn({ name: 'ticketId', referencedColumnName: 'id' })
-  public ticketsTable?: Ticket[];
+  @OneToMany(() => Ticket, (ticket) => ticket.event)
+  public tickets?: Ticket[];
 }
 
 export default User;
