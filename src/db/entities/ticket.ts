@@ -13,7 +13,7 @@ class Ticket extends Base {
   @Column({ type: 'int4' })
   public paymentStatus?: number;
 
-  @Column({ type: 'uuid', select: false })
+  @Column({ type: 'uuid' })
   public userId: string;
 
   @Column({ type: 'uuid', select: false })
