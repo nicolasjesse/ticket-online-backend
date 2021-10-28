@@ -3,7 +3,6 @@ import {
 } from 'express';
 import * as httpStatus from 'http-status';
 import cors from 'cors';
-import compress from 'compression';
 import helmet from 'helmet';
 import { v4 } from 'uuid';
 import { InversifyExpressServer } from 'inversify-express-utils';
@@ -50,8 +49,6 @@ export default class Server {
       }));
 
       app.disable('etag');
-
-      app.use(compress());
 
       app.use(helmet());
 
